@@ -1,5 +1,4 @@
 from datetime import date
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.src.api.v1.users.models.usersmodel import User
@@ -30,6 +29,7 @@ class loginservices:
             username=admin.username,
             email=admin.email,
             hashed_password=hashed_password,
+            phone_number=admin.phone_number, 
             role="admin"
         )
         db.add(new_admin)
@@ -39,6 +39,7 @@ class loginservices:
         response_data = {
                 "username": admin.username,
                 "email": admin.email,
+                "phone": admin.phone_number,
                 "role": new_admin.role,
             }
         return Response(
@@ -49,10 +50,8 @@ class loginservices:
 
     
     #USER LOGIN
-    # def login(db: Session, username: str, password: str):
     def login(db: Session, username: str, password: str):
-        
-        # user = db.query(User).filter(User.username == username).first()]
+    
         user = db.query(User).filter(User.username == username).first()
         
         if not user or not verify_password(password, user.hashed_password):   

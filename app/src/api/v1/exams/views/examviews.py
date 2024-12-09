@@ -14,7 +14,7 @@ from app.src.api.v1.users.services.user_authentication.user_auth import authoriz
 teacher_exam_router = APIRouter()
 
 
-@teacher_exam_router.post("/teacher/add_exam/paper_s3_bucket", tags=["teacher"])
+@teacher_exam_router.post("/teacher/add_exam/paper_s3_bucket", tags=["Exam"])
 def add_exam_and_paper_in_s3bucket(
         date: str = Query(...),
         status: str = Query(...),
@@ -25,7 +25,7 @@ def add_exam_and_paper_in_s3bucket(
     ):
         return teacherexamservices.add_exam_and_paper_in_s3bucket(date,status,marks,test_paper,db,current_user)
     
-@teacher_exam_router.get("/teacher-student/view_exam/{exam_id}", tags=["teacher", "student"])
+@teacher_exam_router.get("/teacher-student/view_exam/{exam_id}", tags=["Exam"])
 def view_exam_schedule(
         request: Request,
         exam_id: int,
@@ -34,7 +34,7 @@ def view_exam_schedule(
     ):
         return examviewservices.view_exam_schedule(exam_id,current_user,db,request)
         
-@teacher_exam_router.get("/teacher/view_testpaper/{exam_id}", tags=["teacher"])
+@teacher_exam_router.get("/teacher/view_testpaper/{exam_id}", tags=["Exam"])
 def view_testpaper_from_s3(
         exam_id: int,
         db: Session = Depends(get_db),
@@ -42,7 +42,7 @@ def view_testpaper_from_s3(
     ):
         return examviewservices.view_testpaper_from_s3(db,current_user,exam_id)
     
-@teacher_exam_router.put("/teacher/update_exam/{exam_id}", tags=["teacher"])
+@teacher_exam_router.put("/teacher/update_exam/{exam_id}", tags=["Exam"])
 def update_exam_schedule(
         exam_id: int,
         date: str = Query(...),
@@ -54,6 +54,6 @@ def update_exam_schedule(
     ):
         return examupdateservices.update_exam_schedule(exam_id,date,status,marks,current_user,db)
     
-@teacher_exam_router.delete("/teacher/delete_exam/{exam_id}" , tags=['teacher'])
+@teacher_exam_router.delete("/teacher/delete_exam/{exam_id}" , tags=['Exam'])
 def delete_exam(exam_id: int, current_user=Depends(authorize_user), db: Session = Depends(get_db)):
         return examdeleteservices.delete_exam(exam_id,current_user,db)

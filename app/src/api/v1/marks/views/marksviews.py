@@ -14,7 +14,7 @@ from app.src.api.v1.users.services.user_authentication.user_auth import authoriz
 teacher_marks_router = APIRouter()
 student_marks_router = APIRouter()
 
-@teacher_marks_router.post("/teacher/generate_marks/{exam_id}", tags=['teacher'])
+@teacher_marks_router.post("/teacher/generate_marks/{exam_id}", tags=['Marks'])
 def generate_marks(
         exam_id: int, 
         marks_data: List[GenerateMarks],
@@ -23,7 +23,7 @@ def generate_marks(
     ):
         return teachermarksservices.generate_marks(exam_id,marks_data,db,current_user)
     
-@student_marks_router.get("/students/{student_id}/marks", tags = ["student"])
+@student_marks_router.get("/students/{student_id}/marks", tags = ["Marks"])
 def get_student_marks(
         student_id: int, 
         db: Session = Depends(get_db), 

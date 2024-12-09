@@ -17,7 +17,7 @@ admin_router = APIRouter()
 admin_serv_router = APIRouter()
 
 
-@admin_router.post("/admin/register")
+@admin_router.post("/admin/register", tags=["Login"])
 def admin_register(admin: AdminCreate, db: Session = Depends(get_db)):
     return loginservices.admin_register(admin,db)
 
