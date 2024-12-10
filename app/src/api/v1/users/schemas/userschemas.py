@@ -126,3 +126,7 @@ class TeacherUpdate(UserUpdate):
 
 class StudentUpdate(UserUpdate):
     pass
+
+class VerifyOTP(BaseModel):
+    phone_number: int
+    otp: str

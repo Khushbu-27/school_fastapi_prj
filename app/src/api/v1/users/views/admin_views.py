@@ -10,6 +10,7 @@ from app.src.api.v1.users.services.crud.updateusers import adminupdateservices
 from app.src.api.v1.users.services.crud.viewusers import adminviewservices
 from app.src.api.v1.users.services.loginusers.login import loginservices
 from app.src.api.v1.users.schemas.userschemas import AdminCreate, StudentCreate, TeacherCreate, TeacherSalary, UserUpdate
+from app.src.api.v1.users.services.loginusers.loginwithphn import loginwithphnservices
 from app.src.api.v1.users.services.user_authentication.user_auth import authorize_admin, authorize_user
 
 
@@ -20,6 +21,14 @@ admin_serv_router = APIRouter()
 @admin_router.post("/admin/register", tags=["Login"])
 def admin_register(admin: AdminCreate, db: Session = Depends(get_db)):
     return loginservices.admin_register(admin,db)
+
+@admin_router.post("/login_with_phone", tags=["Login with phn"])
+def login_with_phone_number(phone_number: str,db: Session = Depends(get_db)):
+    return loginwithphnservices.login_with_phone_number(db, phone_number)
+
+@admin_router.post("/verify_otp", tags=["Login with phn"])
+def verify_otp(phone_number: str, otp: int,db: Session = Depends(get_db)):
+    return loginwithphnservices.verify_otp(db, phone_number, otp)
 
 @admin_serv_router.post("/admin/add_student", tags=["admin"])
 def create_student(student: StudentCreate, db: Session = Depends(get_db), token: str = Depends(authorize_admin)):
