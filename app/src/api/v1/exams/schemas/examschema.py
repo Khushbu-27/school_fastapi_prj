@@ -9,7 +9,7 @@ class ExamStatus(str, Enum):
     scheduled = "scheduled"
 
 class ExamCreate(BaseModel):
-    class_name: int = Field(..., ge=0, le=12, description="Marks must be between 0 and 12.") 
+    class_name: int = Field(..., ge=0, le=12, description="Exam must be between 0 and 12.") 
     subject_name: str
     date: date
     status: ExamStatus = ExamStatus.scheduled 
@@ -30,7 +30,7 @@ class ExamCreate(BaseModel):
     
 class ExamResponse(BaseModel):
     id: int
-    class_name: int = Field(..., ge=0, le=12, description="Marks must be between 0 and 12.") 
+    class_name: int = Field(..., ge=0, le=12, description="Exam must be between 0 and 12.") 
     subject_name: str
     date: date
     status: ExamStatus
