@@ -16,6 +16,7 @@ def get_exams():
 def create_exam(exam:Exam):
     collection_name.insert_one(dict(exam))
     return {"msg":"exam create sucessfully", "exam": exam }
+
 @router.put("/{id}")
 def update_exam(id: str, exam: Exam):
     collection_name.find_one_and_update({"_id":ObjectId(id)},{"$set": dict(exam)})

@@ -29,8 +29,8 @@ class User(Base):
     
     def format_phone_number(phone_number):
         
-        if not phone_number.startswith('+1'):
-            phone_number = '+1' + phone_number
+        if not phone_number.startswith('91'):
+            phone_number = '91' + phone_number
         return phone_number
 
     

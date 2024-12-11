@@ -1,14 +1,16 @@
 
+from datetime import datetime
 from fastapi import APIRouter, HTTPException
 import os
-from requests import Session
+from sqlalchemy.orm import Session
 from app.src.api.v1.users.models.usersmodel import User
 from twilio.rest import Client
 from dotenv import load_dotenv
 import random
 from app.src.api.v1.users.services.user_authentication.user_auth import create_access_token
 from app.src.api.v1.utils.response_utils import Response
-
+import logging
+logger = logging.getLogger(__name__)
 load_dotenv()
 
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
@@ -24,7 +26,9 @@ class loginwithphnservices:
     # LOGIN WITH PHONE NUMBER (ONLY ADMIN)
     def login_with_phone_number(db: Session, phone_number: str):
         
-        user = db.query(User).filter(User.format_phone_number == phone_number, User.role == "admin").first()
+        user = db.query(User).filter(User.phone_number == phone_number, User.role == "admin").first()
+
+        logger.info(user)
 
         if not user:
             return Response(
@@ -33,7 +37,9 @@ class loginwithphnservices:
                 data={}
             ).send_error_response()
 
+      
         otp = random.randint(100000, 999999)  
+        otp_storage[phone_number] = {"otp": otp, "timestamp": datetime.now()}
         otp_message = f"Your OTP code is: {otp}"
 
         try:
@@ -45,7 +51,7 @@ class loginwithphnservices:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Twilio error: {str(e)}")
 
-        user.otp = otp  
+        otp_storage[phone_number] = otp  
         db.commit()
 
         return Response(
@@ -62,7 +68,7 @@ class loginwithphnservices:
         if not user:
             raise HTTPException(status_code=404, detail="Admin not found")
         
-        if user.otp != otp:
+        if otp_storage[phone_number] != otp:
             raise HTTPException(status_code=400, detail="Invalid OTP")
         
         access_token = create_access_token(data={"sub": user.username, "role": user.role})
