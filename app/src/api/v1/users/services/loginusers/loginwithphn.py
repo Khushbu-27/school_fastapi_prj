@@ -9,8 +9,8 @@ import random
 from app.src.api.v1.users.services.user_authentication.user_auth import create_access_token
 from app.src.api.v1.utils.response_utils import Response
 
-
 load_dotenv()
+
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_phone_number = os.getenv("TWILIO_PHONE_NUMBER")
@@ -24,7 +24,7 @@ class loginwithphnservices:
     # LOGIN WITH PHONE NUMBER (ONLY ADMIN)
     def login_with_phone_number(db: Session, phone_number: str):
         
-        user = db.query(User).filter(User.phone_number == phone_number, User.role == "admin").first()
+        user = db.query(User).filter(User.format_phone_number == phone_number, User.role == "admin").first()
 
         if not user:
             return Response(

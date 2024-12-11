@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, Integer, String , Date
+from sqlalchemy import BigInteger, Column, Integer, String , Date
 from sqlalchemy.orm import relationship
 from app.database.database import Base
 
@@ -11,10 +11,10 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    phone_number = Column(Integer ,nullable=True)   
+    phone_number = Column(BigInteger ,nullable=True)   
     email = Column(String, unique=True)
     role = Column(String) 
-    salary = Column(Integer, nullable=True)  
+    salary = Column(BigInteger, nullable=True)  
     class_name = Column(Integer, nullable=True)  
     subject_name = Column(String, nullable=True)
     attendance = Column(Integer, default=0)
@@ -27,6 +27,12 @@ class User(Base):
 
     marks = relationship("StudentMarks", back_populates="user")
     
+    def format_phone_number(phone_number):
+        
+        if not phone_number.startswith('+1'):
+            phone_number = '+1' + phone_number
+        return phone_number
+
     
     # @admin_serv_router.post("/admin/add_student", tags=["admin"])
     # def create_student(student: StudentCreate, db: Session = Depends(get_db), token: str = Depends(auth.authorize_admin)):
