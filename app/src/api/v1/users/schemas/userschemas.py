@@ -19,7 +19,7 @@ class AdminCreate(BaseModel):
         if len(str(v)) != 10:
             raise ValueError('Phone number must be exactly 10 digits.')
         return v
-
+  
     @field_validator('password')
     def validate_password(cls, v):
         if not any(char.isdigit() for char in v):
@@ -76,7 +76,7 @@ class StudentResponse(BaseModel):
     id: int
     username: str
     email: str
-    class_name: int = Field(..., ge=0, le=12, description="Marks must be between 0 and 12.") 
+    class_name: int = Field(..., ge=0, le=12, description="Class must be between 0 and 12.") 
 
     class Config:
         orm_mode = True
@@ -85,7 +85,7 @@ class TeacherCreate(BaseModel):
     username: str = Field(..., pattern="^[a-zA-Z0-9_]+$", max_length=20)
     email: EmailStr
     password: str = Field(min_length=8)
-    class_name: int = Field(..., ge=0, le=12, description="Marks must be between 0 and 12.") 
+    class_name: int = Field(..., ge=0, le=12, description="Class must be between 0 and 12.") 
     subject_name: str 
 
     @field_validator('password')

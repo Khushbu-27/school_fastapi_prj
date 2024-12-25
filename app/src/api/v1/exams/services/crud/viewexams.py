@@ -1,5 +1,5 @@
 
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.src.api.v1.exams.models.exammodel import Exam
@@ -11,10 +11,10 @@ from app.src.api.v1.utils.response_utils import Response
 class examviewservices:
     
     #TEACHER,STUDENT VIEW EXAM SCHEDULE
-    def view_exam_schedule(request: Request,exam_id: int,db: Session ,current_user: User= authorize_user):
+    def view_exam_schedule( db: Session ,exam_id: int, current_user: User):
         
-        if current_user.role not in ["student", "teacher"]:
-            raise HTTPException(status_code=403, detail="Only students and teachers can view exam schedules.")
+        if current_user.role != "teacher":
+            raise HTTPException(status_code =status.HTTP_403_FORBIDDEN, detail="Only students and teachers can view exam schedules.")
 
         exam = db.query(Exam).filter(Exam.id == exam_id).first()
         if not exam:
@@ -52,9 +52,10 @@ class examviewservices:
         
     #TEACHER VIEW EXAM PAPER FROM S3    
     def view_testpaper_from_s3(
+        
         exam_id: int,
-        db: Session ,
-        current_user: authorize_user,
+        db: Session,
+        current_user: User
     ):
         if current_user.role != "teacher":
             raise HTTPException(

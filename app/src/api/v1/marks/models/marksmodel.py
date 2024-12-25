@@ -14,9 +14,9 @@ class StudentMarks(Base):
     subject_name = Column(String, nullable=False) 
     exam_id = Column(Integer, ForeignKey("exams.id", ondelete="CASCADE"), nullable=False)   
     student_marks = Column(Integer, nullable=False) 
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)  
+    # user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
-    user = relationship("User", back_populates="marks")
+    # user = relationship("User", back_populates="marks")
     exam = relationship("Exam", back_populates="student_marks")
     #     "Exam",
     #     primaryjoin="StudentMarks.exam_id == remote(Exam.id)",

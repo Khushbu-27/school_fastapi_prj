@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from app.database.database import get_db
 from app.src.api.v1.users.models.usersmodel import User
-from app.src.api.v1.utils.response_utils import Response
+from app.src.api.v1.utils.response_utils import Response 
 
 logging.basicConfig(level=logging.INFO)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login/callback")
@@ -19,14 +19,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    # if 'role' not in to_encode:
-    #     raise ValueError("Role must be included in the token data")
 
     expire = datetime.utcnow() + (expires_delta if expires_delta else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
     
-def decode_access_token(token: str):
+def decode_access_token(token: str): 
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return payload
@@ -74,6 +72,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def authorize_admin(token: str = Depends(JWTBearer()), db: Session = Depends(get_db)):
+    
     payload = decode_access_token(token)
     if payload.get("role") != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin authorization required")
@@ -85,7 +84,6 @@ def authorize_user(token: str = Depends(JWTBearer()), db: Session = Depends(get_
     logging.info(f"Decoded payload: {payload}")  
     
     username = payload.get("sub")
-    # role = payload.get("role")
     user = db.query(User).filter(User.username == username).first()
     
     if user.role not in ["admin", "teacher", "student"]:

@@ -25,15 +25,15 @@ class User(Base):
             raise ValueError("Salary must be a positive integer")
         self.salary = salary
 
-    marks = relationship("StudentMarks", back_populates="user")
+    # marks = relationship("StudentMarks", back_populates="user"
     
     def format_phone_number(phone_number):
         
-        if not phone_number.startswith('91'):
-            phone_number = '91' + phone_number
+        if not phone_number.startswith('+91'):
+            phone_number = '+91' + phone_number
         return phone_number
 
-    
+
     # @admin_serv_router.post("/admin/add_student", tags=["admin"])
     # def create_student(student: StudentCreate, db: Session = Depends(get_db), token: str = Depends(auth.authorize_admin)):
     #     return adminservices.create_student(student,db,token)

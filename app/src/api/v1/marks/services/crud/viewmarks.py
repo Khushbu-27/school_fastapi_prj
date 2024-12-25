@@ -3,15 +3,17 @@ from typing import List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.src.api.v1.exams.services.crud.viewexams import Exam
-from app.src.api.v1.marks.schemas.marksschema import StudentMarks
+# from app.src.api.v1.marks.schemas.marksschema import StudentMarks
 from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user
 from app.src.api.v1.utils.response_utils import Response
+from app.src.api.v1.users.models.usersmodel import User
+from app.src.api.v1.marks.models.marksmodel import StudentMarks
 
 
 class studentmarksservices:
 
     #STUDENT VIEW OWN MARKS
-    def get_student_marks(student_id: int, db: Session, current_user=authorize_user, response_model=List[StudentMarks]):
+    def get_student_marks(student_id: int, db: Session, current_user: User, response_model=List[StudentMarks]):
 
         if current_user.role != "student" or current_user.id != student_id:
             raise HTTPException(status_code=403, detail="Access forbidden")
@@ -40,7 +42,7 @@ class studentmarksservices:
         return Response(
             data=[
                 {
-                    "id": record.id,
+                    "marks_id": record.id,
                     "student_name": record.student_name,
                     "class_name": record.class_name,
                     "subject_name": record.subject_name,
@@ -52,6 +54,3 @@ class studentmarksservices:
             status_code=200,
             message="Student marks details retrieved successfully"
         ).send_success_response()
-
-
-        

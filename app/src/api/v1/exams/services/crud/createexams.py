@@ -2,15 +2,12 @@
 import boto3 ,os
 from datetime import datetime
 from fastapi import HTTPException, UploadFile
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.src.api.v1.exams.config.awsconfig import AWS_ACCESS_KEY_ID, AWS_BUCKET_NAME, AWS_REGION, AWS_SECRET_ACCESS_KEY
 from app.src.api.v1.exams.models.exammodel import Exam
 from app.src.api.v1.users.models.usersmodel import User
 from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user
 from app.src.api.v1.utils.response_utils import Response
-from fastapi.responses import JSONResponse
-
 
 s3_client = boto3.client(
     "s3",

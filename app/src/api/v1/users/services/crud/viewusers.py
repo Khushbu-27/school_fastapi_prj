@@ -149,7 +149,7 @@ class teacherviewservices:
         
         salary = db.query(User).filter(User.salary == current_user.salary).first()
 
-        if current_user.salary is None:
+        if salary is None:
             raise HTTPException(status_code=404, detail="Salary not set for this teacher")
 
         response_data = {
@@ -165,7 +165,7 @@ class teacherviewservices:
 
 
     #TEACHER VIEW STUDENT INFO
-    def teacher_view_student_info(student_id: int, current_user, db: Session):
+    def teacher_view_student_info(db: Session, student_id: int, current_user = User):
 
         if current_user.role != "teacher":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Teacher authorization required")

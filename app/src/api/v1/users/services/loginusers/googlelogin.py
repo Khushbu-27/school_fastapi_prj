@@ -8,6 +8,7 @@ from app.database.database import get_db
 import requests
 from dotenv import load_dotenv
 from app.src.api.v1.users.services.user_authentication.user_auth import ACCESS_TOKEN_EXPIRE_MINUTES, JWTBearer, authorize_user, create_access_token, decode_access_token
+from app.src.api.v1.users.models.usersmodel import User
 
 google_login_router = APIRouter()
 
@@ -61,9 +62,9 @@ def google_callback(code: str, db: Session = Depends(get_db)):
     user_info_response = requests.get(user_info_url, headers=user_info_headers)
     user_info = user_info_response.json()
 
-    user = db.query(authorize_user).filter(authorize_user.email == user_info["email"]).first()
+    user = db.query(User).filter(User.email == user_info["email"]).first()
     if not user:
-        user = authorize_user(
+        user = User(
             username=user_info["email"].split("@")[0],
             email=user_info["email"],
             role="student",

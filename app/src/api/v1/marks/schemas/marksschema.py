@@ -31,6 +31,8 @@ class MarksGenerationResponse(BaseModel):
         orm_mode = True 
 
 class StudentMarks(BaseModel):
+    
+    id:int
     student_name: str
     class_name: int = Field(..., ge=0, le=12, description="Marks must be between 0 and 12.") 
     subject_name: str

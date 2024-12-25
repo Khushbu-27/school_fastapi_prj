@@ -9,6 +9,7 @@ from app.database.database import get_db
 from dotenv import load_dotenv
 
 from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user, create_access_token
+from app.src.api.v1.users.models.usersmodel import User
 load_dotenv()
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 
@@ -60,9 +61,9 @@ def facebook_callback(code: str, db: Session = Depends(get_db)):
     if "error" in user_info:
         raise HTTPException(status_code=400, detail=user_info["error"]["message"])
 
-    user = db.query(authorize_user).filter(authorize_user.email == user_info.get("email")).first()
+    user = db.query(User).filter(User.email == user_info.get("email")).first()
     if not user:
-        user = authorize_user(
+        user = User(
             username=user_info["name"].replace(" ", "_"),
             email=user_info.get("email"),
             role="student",

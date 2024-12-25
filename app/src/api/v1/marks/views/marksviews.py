@@ -4,8 +4,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database.database import get_db
-from app.src.api.v1.marks.models.marksmodel import StudentMarks
-from app.src.api.v1.marks.schemas.marksschema import GenerateMarks
+from app.src.api.v1.marks.schemas.marksschema import GenerateMarks, StudentMarks
 from app.src.api.v1.marks.services.crud.createmarks import teachermarksservices
 from app.src.api.v1.marks.services.crud.viewmarks import studentmarksservices
 from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user

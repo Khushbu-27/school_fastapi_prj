@@ -1,5 +1,5 @@
 
-from fastapi import HTTPException, Query
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.src.api.v1.users.models.usersmodel import User
 from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user
@@ -9,9 +9,9 @@ from app.src.api.v1.utils.response_utils import Response
 class userdeleteservices:
     
     #ADMIN DELETE USERS
-    def admin_delete_user(user_id: int,db: Session, current_user: User,admin_id: int ):
+    def admin_delete_user(user_id: int,db: Session, current_user: User):
         
-        admin = db.query(User).filter(User.id == admin_id, User.role == "admin").first()
+        admin = db.query(User).filter(User.role == "admin").first()
 
         if not admin:
             raise HTTPException(status_code=403, details= 'Only admin can delete users')

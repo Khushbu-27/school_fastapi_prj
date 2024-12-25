@@ -5,22 +5,22 @@ from typing import List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.src.api.v1.exams.services.crud.viewexams import Exam
-from app.src.api.v1.marks.schemas.marksschema import GenerateMarks, GeneratedMarkResponse, StudentMarks
-from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user
+from app.src.api.v1.marks.schemas.marksschema import GenerateMarks, GeneratedMarkResponse 
+# from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user
 from app.src.api.v1.utils.response_utils import Response
+from app.src.api.v1.users.models.usersmodel import User
+from app.src.api.v1.marks.models.marksmodel import StudentMarks
 
 
 class teachermarksservices:
 
     #TEACHER GENERATE STUDENT MARKS
-    def generate_marks(exam_id: int, marks_data: List[GenerateMarks],db: Session,current_user = authorize_user):
+    def generate_marks(exam_id: int, marks_data: List[GenerateMarks],db: Session,current_user: User):
 
         if current_user.role != "teacher":
             raise HTTPException(status_code=403, detail="Only teachers can generate marks")
 
-        exam = db.query(Exam).filter(
-            Exam.id == exam_id
-        ).first()
+        exam = db.query(Exam).filter(Exam.id == exam_id).first()
 
         if not exam:
             raise HTTPException(status_code=404, detail="Exam not found.")
@@ -31,9 +31,9 @@ class teachermarksservices:
 
         for mark in marks_data:
             
-            student = db.query(authorize_user).filter(
-                authorize_user.username == mark.student_name,
-                authorize_user.class_name == exam.class_name,
+            student = db.query(User).filter(
+                User.username == mark.student_name,
+                User.class_name == exam.class_name,
                 # models.User.subject_name == exam.subject_name
             ).first()
 

@@ -27,12 +27,12 @@ def add_exam_and_paper_in_s3bucket(
     
 @teacher_exam_router.get("/teacher-student/view_exam/{exam_id}", tags=["Exam"])
 def view_exam_schedule(
-        request: Request,
+        # request: Request,
         exam_id: int,
-        current_user: User = Depends(authorize_user),
         db: Session = Depends(get_db),
+        current_user: User = Depends(authorize_user)
     ):
-        return examviewservices.view_exam_schedule(exam_id,current_user,db,request)
+        return examviewservices.view_exam_schedule(db,exam_id,current_user)
         
 @teacher_exam_router.get("/teacher/view_testpaper/{exam_id}", tags=["Exam"])
 def view_testpaper_from_s3(
@@ -40,20 +40,21 @@ def view_testpaper_from_s3(
         db: Session = Depends(get_db),
         current_user=Depends(authorize_user),
     ):
-        return examviewservices.view_testpaper_from_s3(db,current_user,exam_id)
+        return examviewservices.view_testpaper_from_s3(exam_id,db,current_user)
     
 @teacher_exam_router.put("/teacher/update_exam/{exam_id}", tags=["Exam"])
 def update_exam_schedule(
         exam_id: int,
+        db: Session = Depends(get_db),
         date: str = Query(...),
         status: str = None,
         marks: int = None,
         # test_paper: UploadFile = File(None),  
         current_user = Depends(authorize_user),
-        db: Session = Depends(get_db)
+        
     ):
-        return examupdateservices.update_exam_schedule(exam_id,date,status,marks,current_user,db)
+        return examupdateservices.update_exam_schedule(exam_id,db,date,status,marks,current_user)
     
 @teacher_exam_router.delete("/teacher/delete_exam/{exam_id}" , tags=['Exam'])
 def delete_exam(exam_id: int, current_user=Depends(authorize_user), db: Session = Depends(get_db)):
-        return examdeleteservices.delete_exam(exam_id,current_user,db)
+        return examdeleteservices.delete_exam(exam_id,db,current_user)

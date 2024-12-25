@@ -20,8 +20,8 @@ def teacher_view_own_salary( db: Session = Depends(get_db), current_user = Depen
     return teacherviewservices.teacher_view_own_salary(db,current_user)
         
 @teacher_serv_router.get("/teacher/view_student/{student_id}", tags=["teacher"])
-def teacher_view_student_info(student_id: int, current_user = Depends(authorize_user), db: Session = Depends(get_db)):
-    return teacherviewservices.teacher_view_student_info(student_id,current_user,db)
+def teacher_view_student_info(student_id: int, db: Session = Depends(get_db), current_user = Depends(authorize_user)):
+    return teacherviewservices.teacher_view_student_info(db,student_id,current_user)
     
 @teacher_serv_router.put("/teacher/update/{teacher_id}", response_model=TeacherResponse,  tags=["teacher"])
 def teacher_update_own_info(update_data: UserUpdate, current_user = Depends(authorize_user), db: Session = Depends(get_db)):

@@ -49,8 +49,8 @@ def admin_update_teacher_salary(teacher_id: int,salary: TeacherSalary, db: Sessi
         return adminupdateservices.admin_update_teacher_salary(teacher_id,db,current_user,salary)
     
 @admin_serv_router.delete("/admin/delete_user/{user_id}", tags=["admin"] )
-def admin_delete_user(user_id: int,admin_id: int = Query(...) ,current_user=Depends(authorize_user), db: Session = Depends(get_db)):
-        return userdeleteservices.admin_delete_user(user_id,current_user,db, admin_id)
+def admin_delete_user(user_id: int,current_user=Depends(authorize_user), db: Session = Depends(get_db)):
+        return userdeleteservices.admin_delete_user(user_id,db,current_user)
 
 
 
