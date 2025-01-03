@@ -17,7 +17,14 @@ class adminservices:
             raise HTTPException(status_code=400, detail="User already added")
 
         hashed_password = get_password_hash(student.password)
-        new_student = User(username=student.username, email=student.email, hashed_password=hashed_password, role="student" , class_name=student.class_name)
+        new_student = User(
+            username=student.username, 
+            email=student.email, 
+            hashed_password=hashed_password, 
+            role="student" , 
+            class_name=student.class_name
+        )
+               
         db.add(new_student)
         db.commit()
         db.refresh(new_student)
@@ -43,7 +50,15 @@ class adminservices:
             raise HTTPException(status_code=400, detail="User already added")
         
         hashed_password = get_password_hash(teacher.password)
-        new_teacher = User(username=teacher.username, email=teacher.email, hashed_password=hashed_password, role="teacher",class_name=teacher.class_name,subject_name=teacher.subject_name)
+        new_teacher = User(
+            username=teacher.username,
+            email=teacher.email, 
+            hashed_password=hashed_password, 
+            role="teacher",
+            class_name=teacher.class_name,
+            subject_name=teacher.subject_name
+            )
+        
         db.add(new_teacher)
         db.commit()
         db.refresh(new_teacher)

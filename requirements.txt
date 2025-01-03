@@ -6,5 +6,11 @@ passlib
 sqlalchemy
 python-jose
 alembic
-psycopg2
 authlib
+psycopg2
+pydantic[email]
+python-dotenv
+twilio
+python-multipart
+boto3
+pydantic_settings

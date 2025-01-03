@@ -1,0 +1,74 @@
+
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: school_app
+    restart: always
+    depends_on:
+      - db 
+    volumes:
+      - .:/app
+    networks:
+      - mynet
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - "8000:80"
+
+  db:
+    image: postgres:15-alpine
+    container_name: db_conn
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - mynet
+    # ports:
+    #   - 5432:5432
+    environment:
+      - POSTGRES_USER= ${POSTGRES_USER}
+      - POSTGRES_PASSWORD= ${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      # - POSTGRES_HOST=${POSTGRES_HOST}
+      # - POSTGRES_PORT=${POSTGRES_PORT}
+    
+volumes:
+  postgres_data: 
+
+networks:
+  mynet:
+    driver: bridge
+
+# version: "3.0"
+
+# services:
+#   app:
+#     build:
+#       context: ./
+#     container_name: fastapi_app
+#     ports:
+#       - "8000:8000"
+#     environment:
+#       - DATABASE_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+#     depends_on:
+#       - db
+#     volumes:
+#       - ./app:/app
+
+#   db:
+#     image: postgres:15
+#     container_name: postgres_db
+#     restart: always
+#     environment:
+#       POSTGRES_USER: ${POSTGRES_USER}
+#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#       POSTGRES_DB: ${POSTGRES_DB}
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     # ports:
+#     #   - "5432:5432"
+
+# volumes:
+#   postgres_data:

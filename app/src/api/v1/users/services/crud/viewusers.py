@@ -191,8 +191,6 @@ class studentviewservices:
     #STUDENT VIEW OWN INFO
     def student_view_own__info(student_id: str,db: Session,current_user= User):
         
-        print(f"Debug: current_user.id = {current_user.id}, student_id = {student_id}")
-        
         if str(current_user.id) != student_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

@@ -37,9 +37,7 @@ class adminupdateservices:
 
     # ADMIN UPDATE TEACHER SALARY
     def admin_update_teacher_salary(teacher_id: int,db: Session ,current_user:User,salary: TeacherSalary):
-        
-        
-        # teacher = db.query(User).filter(User.id == teacher_id, User.role == "teacher").first()
+    
         teacher = db.query(User).filter(User.id == teacher_id, User.role == "teacher").first()
 
         if teacher is None:

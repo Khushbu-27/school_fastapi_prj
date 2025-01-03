@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.src.api.v1.exams.models.exammodel import Exam
 from app.src.api.v1.users.models.usersmodel import User
-from app.src.api.v1.users.services.user_authentication.user_auth import authorize_user
 from app.src.api.v1.utils.response_utils import Response
 
 
@@ -13,7 +12,7 @@ class examviewservices:
     #TEACHER,STUDENT VIEW EXAM SCHEDULE
     def view_exam_schedule( db: Session ,exam_id: int, current_user: User):
         
-        if current_user.role != "teacher":
+        if current_user.role != ["teacher","student"]:
             raise HTTPException(status_code =status.HTTP_403_FORBIDDEN, detail="Only students and teachers can view exam schedules.")
 
         exam = db.query(Exam).filter(Exam.id == exam_id).first()

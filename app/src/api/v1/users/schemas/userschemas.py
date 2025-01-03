@@ -1,10 +1,6 @@
 
-from enum import Enum
-from fastapi import HTTPException
 from pydantic import BaseModel, Field, EmailStr, field_validator
-from typing import Optional, List
-from datetime import date, datetime
-import re
+from typing import Optional
 
 # Admin Registration Schema 
 class AdminCreate(BaseModel):
@@ -62,7 +58,7 @@ class StudentCreate(BaseModel):
     username: str = Field(..., pattern="^[a-zA-Z0-9_]+$", max_length=20)
     email: EmailStr
     password: str = Field(min_length=8)
-    class_name: int = Field(..., ge=0, le=12, description="Marks must be between 0 and 12.") 
+    class_name: int = Field(..., ge=0, le=12, description="Class must be between 0 and 12.")
 
     @field_validator('password')
     def validate_password(cls, v):
@@ -121,6 +117,7 @@ class UserUpdate(BaseModel):
             if not any(char.isupper() for char in v):
                 raise ValueError('Password must contain at least one uppercase letter.')
         return v
+    
 class TeacherUpdate(UserUpdate):
     pass
 

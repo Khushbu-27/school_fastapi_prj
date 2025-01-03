@@ -11,15 +11,15 @@ class loginservices:
 
     #ADMIN REGISTRATION
     def admin_register(admin: AdminCreate, db: Session ):
+        
+        if db.query(User).filter(User.username == admin.username).first():
+            raise HTTPException(status_code=400, detail="Username already registered")
 
         if admin.password != admin.confirm_password:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Password and confirm password do not match"
             )
-        
-        if db.query(User).filter(User.username == admin.username).first():
-            raise HTTPException(status_code=400, detail="Username already registered")
         
         if db.query(User).filter(User.email == admin.email).first():
             raise HTTPException(status_code=400, detail="Email already registered")
@@ -61,8 +61,6 @@ class loginservices:
                 data= {}
             ).send_error_response()
 
-        today = date.today()
-
         if user.role == "admin":
             access_token = create_access_token(data={"sub": user.username, "role": "admin"})
             
@@ -80,7 +78,9 @@ class loginservices:
                 data= response_data 
             ).send_success_response()
 
-        elif user.role in ["teacher", "student"]:
+        elif user.role in ["teacher", "student"]:    
+            
+            today = date.today()
             
             if user.last_login_date != today:
                 user.attendance += 1

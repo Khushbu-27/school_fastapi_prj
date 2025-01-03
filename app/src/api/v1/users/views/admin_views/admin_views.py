@@ -1,10 +1,11 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.database.database import get_db
+# from app.database.database import get_db
 from app.src.api.v1.users.services.loginusers.login import loginservices
 from app.src.api.v1.users.schemas.userschemas import AdminCreate
 from app.src.api.v1.users.services.loginusers.loginwithphn import loginwithphnservices
+from app.database.database import get_db
 
 admin_router = APIRouter()
 
